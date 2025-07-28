@@ -26,6 +26,10 @@ def SerializeDocs(docs):
 def CheckLogin():
     return 'user' in session
 
+@app.route('/')
+def Home():
+    return redirect(url_for('LoginPage'))
+
 @app.route('/login')
 def LoginPage():
     if CheckLogin():
