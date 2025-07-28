@@ -106,15 +106,16 @@
                     body: JSON.stringify(UserData)
                 });
 
-                const Data = await Response.json();
+                const data = await Response.json();
 
-                if (Data.success) {
-                    ShowStatus('Account created successfully! Redirecting to login...', false);
+                console.log("data",data);
+                if (data.success) {
+                    ShowStatus('Account created successfully!', false);
                     setTimeout(() => {
                         window.location.href = '/login';
                     }, 2000);
                 } else {
-                    ShowStatus(Data.detail || 'Registration failed', true);
+                    ShowStatus(data.detail || 'Registration failed', true);
                 }
             } catch (error) {
                 ShowStatus('Network error. Please try again.', true);
