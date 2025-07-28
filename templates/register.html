@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Management - Register</title>
+    <title>Book Management</title>
     <link rel="stylesheet" href="/static/css/register.css">
 </head>
 <body class="register-page">
     <div class="registercontainer">
         <div class="header">
             <h1>Book Management System</h1>
-            <p>Create New Account</p>
         </div>
 
         <div id="status" class="status hidden"></div>
@@ -29,7 +28,6 @@
             <div class="formgroup">
                 <label for="password">Password:</label>
                 <input type="password" id="password" required placeholder="Create a password" minlength="6">
-                <div class="passwordhelp">Password must be at least 6 characters long</div>
             </div>
 
             <div class="formgroup">
@@ -65,17 +63,12 @@
         }
 
         function ValidateForm() {
-            const Username = document.getElementById('username').value.trim();
             const Fullname = document.getElementById('fullname').value.trim();
             const Email = document.getElementById('email').value.trim();
             const Password = document.getElementById('password').value;
             const ConfirmPassword = document.getElementById('confirmpassword').value;
             const Role = document.getElementById('role').value;
 
-            if (Username.length < 3) {
-                ShowStatus('Username must be at least 3 characters long', true);
-                return false;
-            }
 
             if (!Fullname) {
                 ShowStatus('Please enter your full name', true);

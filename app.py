@@ -43,5 +43,24 @@ def RegisterPage():
     return render_template('register.html')
 
 
+@app.route('/api/auth/register', methods=['POST'])
+def ApiRegister():
+    data = request.get_json()
+    
+    ExistingUser = UsersCollection.find_one({'email': data['email']})
+    if ExistingUser:
+        return jsonify({'success': False, 'detail': 'Username already exists'})
+    
+    NewUser = {
+        'password': data['password'],
+        'name': data['fullname'],
+        'email': data['email'],
+        'role': data['role'],
+        'created_at': datetime.now()
+    }
+    
+    UsersCollection.insert_one(NewUser)
+    return jsonify({'success': True, 'message': 'User created successfully'})
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)
