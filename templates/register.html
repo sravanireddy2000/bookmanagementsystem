@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Management - Register</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="/static/css/register.css">
 </head>
 <body class="register-page">
     <div class="registercontainer">
@@ -16,11 +16,6 @@
         <div id="status" class="status hidden"></div>
 
         <form id="registerform">
-            <div class="formgroup">
-                <label for="username">Username:</label>
-                <input type="text" id="username" required placeholder="Choose a username" minlength="3">
-            </div>
-
             <div class="formgroup">
                 <label for="fullname">Full Name:</label>
                 <input type="text" id="fullname" required placeholder="Enter your full name">
@@ -49,9 +44,6 @@
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
                 </select>
-                <div class="roleinfo">
-                    User: Read access | Admin: Full access
-                </div>
             </div>
 
             <button type="submit" class="btn">Create Account</button>
@@ -144,7 +136,6 @@
             }
 
             const UserData = {
-                username: document.getElementById('username').value.trim(),
                 fullname: document.getElementById('fullname').value.trim(),
                 email: document.getElementById('email').value.trim(),
                 password: document.getElementById('password').value,
@@ -165,21 +156,6 @@
             } else if (ConfirmPassword && Password === ConfirmPassword) {
                 Input.classList.add('success-border');
                 Input.classList.remove('error-border');
-            } else {
-                Input.classList.remove('error-border', 'success-border');
-            }
-        });
-
-        document.getElementById('username').addEventListener('input', () => {
-            const Username = document.getElementById('username').value.trim();
-            const Input = document.getElementById('username');
-
-            if (Username.length >= 3) {
-                Input.classList.add('success-border');
-                Input.classList.remove('error-border');
-            } else if (Username.length > 0) {
-                Input.classList.add('error-border');
-                Input.classList.remove('success-border');
             } else {
                 Input.classList.remove('error-border', 'success-border');
             }
