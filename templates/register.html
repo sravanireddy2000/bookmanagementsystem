@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Management - Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="register-page">
+    <div class="registercontainer">
+        <div class="header">
+            <h1>Book Management System</h1>
+            <p>Create New Account</p>
+        </div>
+
+        <div id="status" class="status hidden"></div>
+
+        <form id="registerform">
+            <div class="formgroup">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required placeholder="Choose a username" minlength="3">
+            </div>
+
+            <div class="formgroup">
+                <label for="fullname">Full Name:</label>
+                <input type="text" id="fullname" required placeholder="Enter your full name">
+            </div>
+
+            <div class="formgroup">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required placeholder="Enter your email address">
+            </div>
+
+            <div class="formgroup">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required placeholder="Create a password" minlength="6">
+                <div class="passwordhelp">Password must be at least 6 characters long</div>
+            </div>
+
+            <div class="formgroup">
+                <label for="confirmpassword">Confirm Password:</label>
+                <input type="password" id="confirmpassword" required placeholder="Confirm your password">
+            </div>
+
+            <div class="formgroup">
+                <label for="role">Role:</label>
+                <select id="role" required>
+                    <option value="">Select Role</option>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <div class="roleinfo">
+                    User: Read access | Admin: Full access
+                </div>
+            </div>
+
+            <button type="submit" class="btn">Create Account</button>
+            <button type="button" class="btn btnback" onclick="GoToLogin()">Back to Login</button>
+        </form>
+    </div>
+
+    <script>
+        function GoToLogin() {
+            window.location.href = '/login';
+        }
+
+        function ShowStatus(Message, IsError = false) {
+            const StatusDiv = document.getElementById('status');
+            StatusDiv.textContent = Message;
+            StatusDiv.className = `status ${IsError ? 'error' : 'success'}`;
+            StatusDiv.classList.remove('hidden');
+            setTimeout(() => StatusDiv.classList.add('hidden'), 5000);
+        }
+
+        function ValidateForm() {
+            const Username = document.getElementById('username').value.trim();
+            const Fullname = document.getElementById('fullname').value.trim();
+            const Email = document.getElementById('email').value.trim();
+            const Password = document.getElementById('password').value;
+            const ConfirmPassword = document.getElementById('confirmpassword').value;
+            const Role = document.getElementById('role').value;
+
+            if (Username.length < 3) {
+                ShowStatus('Username must be at least 3 characters long', true);
+                return false;
+            }
+
+            if (!Fullname) {
+                ShowStatus('Please enter your full name', true);
+                return false;
+            }
+
+            if (!Email.includes('@') || !Email.includes('.')) {
+                ShowStatus('Please enter a valid email address', true);
+                return false;
+            }
+
+            if (Password.length < 6) {
+                ShowStatus('Password must be at least 6 characters long', true);
+                return false;
+            }
+
+            if (Password !== ConfirmPassword) {
+                ShowStatus('Passwords do not match', true);
+                return false;
+            }
+
+            if (!Role) {
+                ShowStatus('Please select a role', true);
+                return false;
+            }
+
+            return true;
+        }
+
+        async function RegisterUser(UserData) {
+            try {
+                const Response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(UserData)
+                });
+
+                const Data = await Response.json();
+
+                if (Data.success) {
+                    ShowStatus('Account created successfully! Redirecting to login...', false);
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                } else {
+                    ShowStatus(Data.detail || 'Registration failed', true);
+                }
+            } catch (error) {
+                ShowStatus('Network error. Please try again.', true);
+            }
+        }
+
+        document.getElementById('registerform').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (!ValidateForm()) {
+                return;
+            }
+
+            const UserData = {
+                username: document.getElementById('username').value.trim(),
+                fullname: document.getElementById('fullname').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                password: document.getElementById('password').value,
+                role: document.getElementById('role').value
+            };
+
+            RegisterUser(UserData);
+        });
+
+        document.getElementById('confirmpassword').addEventListener('input', () => {
+            const Password = document.getElementById('password').value;
+            const ConfirmPassword = document.getElementById('confirmpassword').value;
+            const Input = document.getElementById('confirmpassword');
+
+            if (ConfirmPassword && Password !== ConfirmPassword) {
+                Input.classList.add('error-border');
+                Input.classList.remove('success-border');
+            } else if (ConfirmPassword && Password === ConfirmPassword) {
+                Input.classList.add('success-border');
+                Input.classList.remove('error-border');
+            } else {
+                Input.classList.remove('error-border', 'success-border');
+            }
+        });
+
+        document.getElementById('username').addEventListener('input', () => {
+            const Username = document.getElementById('username').value.trim();
+            const Input = document.getElementById('username');
+
+            if (Username.length >= 3) {
+                Input.classList.add('success-border');
+                Input.classList.remove('error-border');
+            } else if (Username.length > 0) {
+                Input.classList.add('error-border');
+                Input.classList.remove('success-border');
+            } else {
+                Input.classList.remove('error-border', 'success-border');
+            }
+        });
+
+        document.getElementById('email').addEventListener('input', () => {
+            const Email = document.getElementById('email').value.trim();
+            const Input = document.getElementById('email');
+
+            if (Email && (Email.includes('@') && Email.includes('.'))) {
+                Input.classList.add('success-border');
+                Input.classList.remove('error-border');
+            } else if (Email.length > 0) {
+                Input.classList.add('error-border');
+                Input.classList.remove('success-border');
+            } else {
+                Input.classList.remove('error-border', 'success-border');
+            }
+        });
+    </script>
+</body>
+</html>

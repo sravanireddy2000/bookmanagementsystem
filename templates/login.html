@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Management - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-page">
+    <div class="logincontainer">
+        <div class="header">
+            <h1>Book Management System</h1>
+            <p>Library Management Portal</p>
+        </div>
+
+        <div class="demoinfo">
+            <h4>Demo Credentials</h4>
+            <div class="democredentials">
+                <p><strong>Admin:</strong> admin / admin123</p>
+                <p><strong>User:</strong> user / user123</p>
+            </div>
+        </div>
+
+        <div id="status" class="status hidden"></div>
+
+        <form id="loginform">
+            <div class="formgroup">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required placeholder="Enter your username">
+            </div>
+
+            <div class="formgroup">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required placeholder="Enter your password">
+            </div>
+
+            <button type="submit" class="btn">Login</button>
+            <button type="button" class="btn btnregister" onclick="GoToRegister()">Create Account</button>
+        </form>
+    </div>
+
+    <script>
+        function GoToRegister() {
+            window.location.href = '/register';
+        }
+
+        function ShowStatus(Message, IsError = false) {
+            const StatusDiv = document.getElementById('status');
+            StatusDiv.textContent = Message;
+            StatusDiv.className = `status ${IsError ? 'error' : 'success'}`;
+            StatusDiv.classList.remove('hidden');
+            setTimeout(() => StatusDiv.classList.add('hidden'), 5000);
+        }
+
+        async function LoginUser(Username, Password) {
+            try {
+                const Response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: Username, password: Password })
+                });
+                
+                const Data = await Response.json();
+                
+                if (Data.success) {
+                    localStorage.setItem('authtoken', Data.access_token);
+                    localStorage.setItem('userdata', JSON.stringify(Data.user));
+                    return { success: true, user: Data.user };
+                } else {
+                    return { success: false, message: Data.detail || 'Login failed' };
+                }
+            } catch (error) {
+                return { success: false, message: 'Network error. Please try again.' };
+            }
+        }
+
+        function ValidateLogin(Username, Password) {
+            if (!Username.trim()) {
+                return { valid: false, message: 'Please enter username' };
+            }
+            
+            if (!Password) {
+                return { valid: false, message: 'Please enter password' };
+            }
+            
+            return { valid: true };
+        }
+
+        document.getElementById('loginform').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const Username = document.getElementById('username').value.trim();
+            const Password = document.getElementById('password').value;
+            
+            const Validation = ValidateLogin(Username, Password);
+            if (!Validation.valid) {
+                ShowStatus(Validation.message, true);
+                return;
+            }
+            
+            const Result = await LoginUser(Username, Password);
+            if (Result.success) {
+                ShowStatus('Login successful! Redirecting...', false);
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 1500);
+            } else {
+                ShowStatus(Result.message, true);
+            }
+        });
+
+        document.getElementById('username').value = 'admin';
+        document.getElementById('password').value = 'admin123';
+    </script>
+</body>
+</html>
