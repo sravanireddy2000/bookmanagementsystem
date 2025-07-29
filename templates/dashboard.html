@@ -13,8 +13,7 @@
                 <h1>Book Management System</h1>
             </div>
             <div class="userinfo">
-                <div>Welcome, <span id="username"></span></div>
-                <div>Role: <span id="userrole"></span></div>
+                <div>Welcome, <span id="name"></span></div>
                 <button class="btnlogout" onclick="Logout()">Logout</button>
             </div>
         </div>
@@ -46,10 +45,10 @@
 
     <script>
         function CheckAuth() {
-            const Token = localStorage.getItem('authtoken');
+            const token = localStorage.getItem('authtoken');
             const UserData = localStorage.getItem('userdata');
             
-            if (!Token || !UserData) {
+            if (!token || !UserData) {
                 window.location.href = '/login';
                 return false;
             }
@@ -100,10 +99,10 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const User = CheckAuth();
-            if (User) {
-                document.getElementById('username').textContent = User.username;
-                document.getElementById('userrole').textContent = User.role;
+            const user = CheckAuth();
+            if (user) {
+                document.getElementById('name').textContent = user.name;
+                document.getElementById('userrole').textContent = user.role;
                 LoadStats();
                 LoadRecentActivity();
             }
