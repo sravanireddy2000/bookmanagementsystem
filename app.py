@@ -62,5 +62,33 @@ def ApiRegister():
     UsersCollection.insert_one(NewUser)
     return jsonify({'success': True, 'message': 'User created successfully'})
 
+
+@app.route('/api/auth/login', methods=['POST'])
+def ApiLogin():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    
+    user = UsersCollection.find_one({'username': username, 'password': password})
+    
+    if user:
+        session['user'] = {
+            'username': user['username'],
+            'role': user['role'],
+            'name': user['name']
+        }
+        
+        return jsonify({
+            'success': True,
+            'access_token': 'demo_token_123',
+            'token_type': 'bearer',
+            'user': {
+                'username': user['username'],
+                'role': user['role'],
+                'name': user['name']
+            }
+        })
+    
+    return jsonify({'success': False, 'detail': 'Invalid username or password'})
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)
