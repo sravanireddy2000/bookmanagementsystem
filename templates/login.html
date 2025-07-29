@@ -17,8 +17,8 @@
 
         <form id="loginform">
             <div class="formgroup">
-                <label for="username">Username:</label>
-                <input type="text" id="username" required placeholder="Enter your username">
+                <label for="email">Email:</label>
+                <input type="text" id="email" required placeholder="Enter your email">
             </div>
 
             <div class="formgroup">
@@ -44,12 +44,12 @@
             setTimeout(() => StatusDiv.classList.add('hidden'), 5000);
         }
 
-        async function LoginUser(Username, Password) {
+        async function LoginUser(email, Password) {
             try {
                 const Response = await fetch('/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: Username, password: Password })
+                    body: JSON.stringify({ email: email, password: Password })
                 });
                 
                 const Data = await Response.json();
@@ -66,9 +66,9 @@
             }
         }
 
-        function ValidateLogin(Username, Password) {
-            if (!Username.trim()) {
-                return { valid: false, message: 'Please enter username' };
+        function ValidateLogin(email, Password) {
+            if (!email.trim()) {
+                return { valid: false, message: 'Please enter email' };
             }
             
             if (!Password) {
@@ -80,16 +80,16 @@
 
         document.getElementById('loginform').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const Username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
             const Password = document.getElementById('password').value;
             
-            const Validation = ValidateLogin(Username, Password);
+            const Validation = ValidateLogin(email, Password);
             if (!Validation.valid) {
                 ShowStatus(Validation.message, true);
                 return;
             }
             
-            const Result = await LoginUser(Username, Password);
+            const Result = await LoginUser(email, Password);
             if (Result.success) {
                 ShowStatus('Login successful! Redirecting...', false);
                 setTimeout(() => {
@@ -100,7 +100,7 @@
             }
         });
 
-        document.getElementById('username').value = 'admin';
+        document.getElementById('email').value = 'admin';
         document.getElementById('password').value = 'admin123';
     </script>
 </body>
