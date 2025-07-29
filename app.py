@@ -43,6 +43,12 @@ def DashboardPage():
     return render_template('dashboard.html')
 
 
+@app.route('/books')
+def BooksPage():
+    if not CheckLogin():
+        return redirect(url_for('LoginPage'))
+    return render_template('books.html')
+
 @app.route('/register')
 def RegisterPage():
     if CheckLogin():
@@ -96,6 +102,45 @@ def ApiLogin():
         })
     
     return jsonify({'success': False, 'detail': 'Invalid username or password'})
+
+
+
+@app.route('/api/books', methods=['GET'])
+def GetBooks():
+    Books = list(BooksCollection.find())
+    return jsonify(SerializeDocs(Books))
+
+@app.route('/api/books', methods=['POST'])
+def CreateBook():
+    if not CheckLogin():
+        return jsonify({'detail': 'Authentication required'}), 401
+        
+    data = request.get_json()
+    
+    NewBook = {
+        'title': data['title'],
+        'author': data['author'],
+        'category': data['category'],
+        'publisher': data.get('publisher', ''),
+        'year': data.get('year'),
+        'copies': data['copies'],
+        'description': data.get('description', ''),
+        'created_at': datetime.now(),
+        'updated_at': datetime.now()
+    }
+    
+    Result = BooksCollection.insert_one(NewBook)
+    NewBook['_id'] = str(Result.inserted_id)
+    
+    return jsonify(SerializeDoc(NewBook)), 201
+
+@app.route('/api/books/<BookId>', methods=['GET'])
+def GetBook(BookId):
+    Book = BooksCollection.find_one({'_id': ObjectId(BookId)})
+    if not Book:
+        return jsonify({'detail': 'Book not found'})
+    
+    return jsonify(SerializeDoc(Book))
 
 
 
