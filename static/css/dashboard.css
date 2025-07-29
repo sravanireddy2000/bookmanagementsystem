@@ -1,0 +1,240 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerinfo h1 {
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 22px;
+}
+
+.headerinfo p {
+    color: #666;
+    font-size: 14px;
+}
+
+.userinfo {
+    text-align: right;
+}
+
+.userinfo div {
+    margin-bottom: 3px;
+    font-size: 14px;
+}
+
+.userinfo span {
+    color: #333;
+    font-weight: bold;
+}
+
+.btnlogout {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.btnlogout:hover {
+    background: #c82333;
+}
+
+.navigation {
+    background: white;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.navbtn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.navbtn:hover {
+    background: #0056b3;
+}
+
+.dashboardcontent {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.welcome {
+    background: #007bff;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.welcome h2 {
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+
+.welcome p {
+    font-size: 14px;
+}
+
+.statsrow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.statcard {
+    background: white;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.statcard h3 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.statcard .number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+.statcard p {
+    font-size: 12px;
+    color: #666;
+}
+
+.quickactions {
+    margin-bottom: 20px;
+}
+
+.quickactions h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.actionbtn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.actionbtn:hover {
+    background: #1e7e34;
+}
+
+.recentactivity {
+    margin-top: 20px;
+}
+
+.recentactivity h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.activitylist {
+    background: #f8f9fa;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.activityitem {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.activityitem:last-child {
+    border-bottom: none;
+}
+
+.activitytime {
+    color: #666;
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .userinfo {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .navbtn {
+        display: block;
+        margin: 3px 0;
+        width: 100%;
+    }
+
+    .statsrow {
+        grid-template-columns: 1fr;
+    }
+
+    .actionbtn {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+}
