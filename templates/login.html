@@ -52,14 +52,14 @@
                     body: JSON.stringify({ email: email, password: Password })
                 });
                 
-                const Data = await Response.json();
+                const data = await Response.json();
                 
-                if (Data.success) {
-                    localStorage.setItem('authtoken', Data.access_token);
-                    localStorage.setItem('userdata', JSON.stringify(Data.user));
-                    return { success: true, user: Data.user };
+                if (data.success) {
+                    localStorage.setItem('authtoken', data.user.token);
+                    localStorage.setItem('userdata', JSON.stringify(data.user));
+                    return { success: true, user: data.user };
                 } else {
-                    return { success: false, message: Data.detail || 'Login failed' };
+                    return { success: false, message: data.detail };
                 }
             } catch (error) {
                 return { success: false, message: 'Network error. Please try again.' };

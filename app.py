@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 from datetime import datetime
 import json
-
+import jwt
 app = Flask(__name__)
 app.secret_key = '12345'
 CORS(app)
@@ -35,6 +35,13 @@ def LoginPage():
     if CheckLogin():
         return redirect(url_for('DashboardPage'))
     return render_template('login.html')
+
+@app.route('/dashboard')
+def DashboardPage():
+    if not CheckLogin():
+        return redirect(url_for('LoginPage'))
+    return render_template('dashboard.html')
+
 
 @app.route('/register')
 def RegisterPage():
@@ -78,9 +85,11 @@ def ApiLogin():
             'name': user['name']
         }
         
+        payload = {"email": email}
         return jsonify({
             'success': True,
             'user': {
+                'token':jwt.encode(payload,"123456"),
                 'role': user['role'],
                 'name': user['name']
             }

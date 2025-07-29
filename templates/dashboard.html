@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Management - Dashboard</title>
+    <link rel="stylesheet" href="/static/css/books.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="headerinfo">
+                <h1>Book Management System</h1>
+            </div>
+            <div class="userinfo">
+                <div>Welcome, <span id="username"></span></div>
+                <div>Role: <span id="userrole"></span></div>
+                <button class="btnlogout" onclick="Logout()">Logout</button>
+            </div>
+        </div>
+  <div class="dashboardcontent">
+            <div class="welcome">
+                <h2>Welcome to Book Management Dashboard</h2>
+                <p>Manage your library collection efficiently</p>
+            </div>
+
+            <div class="statsrow">
+                <div class="statcard books">
+                    <h3>Total Books</h3>
+                    <div class="number" id="totalbookscount">0</div>
+                    <p>In Collection</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="navigation">
+            <a href="/books" class="navbtn">Books Management</a>
+                       <div class="quickactions">
+                <a href="/books" class="actionbtn">Add New Book</a>
+                <a href="/books" class="actionbtn">Search Books</a>
+            </div>
+        </div>
+
+      
+    </div>
+
+    <script>
+        function CheckAuth() {
+            const Token = localStorage.getItem('authtoken');
+            const UserData = localStorage.getItem('userdata');
+            
+            if (!Token || !UserData) {
+                window.location.href = '/login';
+                return false;
+            }
+            
+            return JSON.parse(UserData);
+        }
+
+        function Logout() {
+            fetch('/api/auth/logout', { method: 'POST' })
+                .then(() => {
+                    localStorage.removeItem('authtoken');
+                    localStorage.removeItem('userdata');
+                    window.location.href = '/logout';
+                });
+        }
+
+        async function LoadStats() {
+            try {
+                const Response = await fetch('/api/stats');
+                const Data = await Response.json();
+                
+                document.getElementById('totalbookscount').textContent = Data.total_books;
+                document.getElementById('totaluserscount').textContent = Data.total_users;
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        function LoadRecentActivity() {
+            const Activities = [
+                { action: 'System initialized successfully', time: 'Just now' },
+                { action: 'Dashboard loaded', time: '1 minute ago' },
+                { action: 'Book Management system ready', time: '5 minutes ago' }
+            ];
+
+            const ActivityList = document.getElementById('activitylist');
+            ActivityList.innerHTML = '';
+
+            Activities.forEach(activity => {
+                const Item = document.createElement('div');
+                Item.className = 'activityitem';
+                Item.innerHTML = `
+                    <div>${activity.action}</div>
+                    <div class="activitytime">${activity.time}</div>
+                `;
+                ActivityList.appendChild(Item);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const User = CheckAuth();
+            if (User) {
+                document.getElementById('username').textContent = User.username;
+                document.getElementById('userrole').textContent = User.role;
+                LoadStats();
+                LoadRecentActivity();
+            }
+        });
+
+        setInterval(() => {
+            LoadStats();
+        }, 30000);
+    </script>
+</body>
+</html>
