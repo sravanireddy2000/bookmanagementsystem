@@ -157,5 +157,17 @@ def SearchBooks():
     return jsonify(SerializeDocs(Books))
 
 
+@app.route('/api/books/<BookId>', methods=['DELETE'])
+def DeleteBook(BookId):
+    if not CheckLogin():
+        return jsonify({'detail': 'Authentication required'}), 401
+        
+    Result = BooksCollection.delete_one({'_id': ObjectId(BookId)})
+    
+    if Result.deleted_count == 0:
+        return jsonify({'detail': 'Book not found'}), 404
+    
+    return jsonify({'message': 'Book deleted successfully'})
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)
