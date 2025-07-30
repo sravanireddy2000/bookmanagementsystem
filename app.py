@@ -177,5 +177,10 @@ def GetStats():
     })
 
 
+@app.route('/logout')
+def Logout():
+    session.clear()
+    return redirect(url_for('LoginPage'))
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)
