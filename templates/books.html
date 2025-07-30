@@ -246,7 +246,7 @@
         async function UpdateBook() {
             if (!SelectedBook) return;
 
-            const BookData = {
+            const bookData = {
                 title: document.getElementById('booktitle').value.trim(),
                 author: document.getElementById('bookauthor').value.trim(),
                 category: document.getElementById('bookcategory').value,
@@ -256,24 +256,24 @@
                 description: document.getElementById('bookdescription').value.trim()
             };
 
-            if (!ValidateForm(BookData.title, BookData.author, BookData.category, BookData.copies)) return;
+            if (!ValidateForm(bookData.title, bookData.author, bookData.category, bookData.copies)) return;
 
             try {
-                const Response = await fetch(`/api/books/${SelectedBook._id}`, {
+                const response = await fetch(`/api/books/${SelectedBook._id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(BookData)
+                    body: JSON.stringify(bookData)
                 });
 
-                if (Response.ok) {
-                    ShowStatus('Book updated successfully!');
+                if (response.ok) {
+                    ShowStatus('book updated successfully!');
                     ClearBookForm();
                     LoadBooks();
                 } else {
-                    ShowStatus('Failed to update book', true);
+                    ShowStatus('failed to update book', true);
                 }
             } catch (error) {
-                ShowStatus('Failed to update book', true);
+                ShowStatus('failed to update book', true);
             }
         }
 
