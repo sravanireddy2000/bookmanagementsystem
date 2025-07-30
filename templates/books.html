@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Management - Books</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="/static/css/books.css">
 </head>
 <body>
     <div class="container">
@@ -76,7 +76,7 @@
             <div class="searchsection">
                 <h3>Search Books</h3>
                 <div class="searchgrid">
-                    <input type="text" id="booksearch" placeholder="Search by title or author...">
+                    <input type="text" id="booksearch" placeholder="Search by title or author">
                     <select id="categoryfilter">
                         <option value="">All Categories</option>
                         <option value="Fiction">Fiction</option>
@@ -189,8 +189,9 @@
             }
 
             try {
-                const Response = await fetch(`/api/books/search?title=${encodeURIComponent(SearchTerm)}`);
+                const Response = await fetch(`/api/books/search?title=${SearchTerm}`);
                 const Books = await Response.json();
+                console.log("books",Books)
                 DisplayBooks(Books);
                 ShowStatus(`Found ${Books.length} book(s) matching "${SearchTerm}"`);
             } catch (error) {

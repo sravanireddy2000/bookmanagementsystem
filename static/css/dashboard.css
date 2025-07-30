@@ -77,7 +77,7 @@ body {
 }
 
 .navbtn {
-    background: #007bff;
+    background: blue;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -101,7 +101,7 @@ body {
 }
 
 .welcome {
-    background: #007bff;
+    background: blue;
     color: white;
     padding: 20px;
     border-radius: 5px;

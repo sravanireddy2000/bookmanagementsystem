@@ -142,6 +142,19 @@ def GetBook(BookId):
     
     return jsonify(SerializeDoc(Book))
 
+@app.route('/api/books/search', methods=['GET'])
+def SearchBooks():
+    Title = request.args.get('title', '')
+    
+    Query = {
+        '$or': [
+            {'title': {'$regex': Title, '$options': 'i'}},
+            {'author': {'$regex': Title, '$options': 'i'}}
+        ]
+    }
+    
+    Books = list(BooksCollection.find(Query))
+    return jsonify(SerializeDocs(Books))
 
 
 if __name__ == '__main__':
