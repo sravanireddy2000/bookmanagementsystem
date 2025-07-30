@@ -19,8 +19,8 @@
         </div>
   <div class="dashboardcontent">
             <div class="welcome">
-                <h2>Welcome to Book Management Dashboard</h2>
-                <p>Manage your library collection efficiently</p>
+                <h2>Welcome to Book Management</h2>
+                <p>Manage your books in library</p>
             </div>
 
             <div class="statsrow">
@@ -33,7 +33,6 @@
             </div>
         </div>
         <div class="navigation">
-            <a href="/books" class="navbtn">Books Management</a>
                        <div class="quickactions">
                 <a href="/books" class="actionbtn">Add New Book</a>
                 <a href="/books" class="actionbtn">Search Books</a>
@@ -67,44 +66,21 @@
 
         async function LoadStats() {
             try {
-                const Response = await fetch('/api/stats');
-                const Data = await Response.json();
+                const response = await fetch('/api/stats');
+                const data = await response.json();
                 
-                document.getElementById('totalbookscount').textContent = Data.total_books;
-                document.getElementById('totaluserscount').textContent = Data.total_users;
+                document.getElementById('totalbookscount').textContent = data.total_books;
             } catch (error) {
-                console.error('Error loading stats:', error);
+                console.error('error loading stats:', error);
             }
         }
 
-        function LoadRecentActivity() {
-            const Activities = [
-                { action: 'System initialized successfully', time: 'Just now' },
-                { action: 'Dashboard loaded', time: '1 minute ago' },
-                { action: 'Book Management system ready', time: '5 minutes ago' }
-            ];
-
-            const ActivityList = document.getElementById('activitylist');
-            ActivityList.innerHTML = '';
-
-            Activities.forEach(activity => {
-                const Item = document.createElement('div');
-                Item.className = 'activityitem';
-                Item.innerHTML = `
-                    <div>${activity.action}</div>
-                    <div class="activitytime">${activity.time}</div>
-                `;
-                ActivityList.appendChild(Item);
-            });
-        }
 
         document.addEventListener('DOMContentLoaded', () => {
             const user = CheckAuth();
             if (user) {
                 document.getElementById('name').textContent = user.name;
-                document.getElementById('userrole').textContent = user.role;
                 LoadStats();
-                LoadRecentActivity();
             }
         });
 

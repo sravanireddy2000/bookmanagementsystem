@@ -104,7 +104,6 @@ def ApiLogin():
     return jsonify({'success': False, 'detail': 'Invalid username or password'})
 
 
-
 @app.route('/api/books', methods=['GET'])
 def GetBooks():
     Books = list(BooksCollection.find())
@@ -168,6 +167,15 @@ def DeleteBook(BookId):
         return jsonify({'detail': 'Book not found'}), 404
     
     return jsonify({'message': 'Book deleted successfully'})
+
+@app.route('/api/stats', methods=['GET'])
+def GetStats():
+    totalBooks = BooksCollection.count_documents({})
+    
+    return jsonify({
+        'total_books': totalBooks,
+    })
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)
