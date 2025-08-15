@@ -11,8 +11,6 @@
         <div class="header">
             <h1>Book Management System</h1>
         </div>
-
-
         <div id="status" class="status hidden"></div>
 
         <form id="loginform">
@@ -91,7 +89,7 @@
             
             const Result = await LoginUser(email, Password);
             if (Result.success) {
-                ShowStatus('Login successful! Redirecting...', false);
+                ShowStatus('Login successful!', false);
                 setTimeout(() => {
                     window.location.href = '/dashboard';
                 }, 1500);
@@ -100,8 +98,6 @@
             }
         });
 
-        document.getElementById('email').value = 'admin';
-        document.getElementById('password').value = 'admin123';
     </script>
 </body>
 </html>
