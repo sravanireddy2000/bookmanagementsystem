@@ -177,6 +177,44 @@ def GetStats():
     })
 
 
+@app.route('/api/books/<BookId>', methods=['PUT'])
+def UpdateBook(BookId):
+    if not CheckLogin():
+        return jsonify({'detail': 'Authentication required'})
+    
+    try:
+        data = request.get_json()
+        
+        UpdateData = {
+            'title': data['title'],
+            'author': data['author'],
+            'category': data['category'],
+            'publisher': data.get('publisher', ''),
+            'year': data.get('year'),
+            'copies': data['copies'],
+            'description': data.get('description', ''),
+            'updated_at': datetime.now()
+        }
+        
+        Result = BooksCollection.update_one(
+            {'_id': ObjectId(BookId)}, 
+            {'$set': UpdateData}
+        )
+        
+        if Result.matched_count == 0:
+            return jsonify({'detail': 'Book not found'})
+        
+        UpdatedBook = BooksCollection.find_one({'_id': ObjectId(BookId)})
+        
+        return jsonify({
+            'success': True, 
+            'message': 'Book updated successfully',
+            'book': SerializeDoc(UpdatedBook)
+        })
+        
+    except Exception as e:
+        return jsonify({'detail': f'Error updating book: {str(e)}'}),
+    
 @app.route('/logout')
 def Logout():
     session.clear()
